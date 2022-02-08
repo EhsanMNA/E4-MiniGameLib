@@ -5,9 +5,14 @@ import me.ehsanmna.e4minigamelib.Utilities.LocationVector;
 import me.ehsanmna.e4minigamelib.Utilities.Region;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class ArenaStats {
 
+
+    HashSet<LocationVector> placedBlocks = new HashSet<>();
     LocationVector waitingPoint;
     LocationVector spectatorPoint;
     HashMap<Team,LocationVector> spawnPoints = new HashMap<>();
@@ -110,6 +115,14 @@ public class ArenaStats {
 
     public void setCanBreakPlacedBlocks(boolean canBreakPlacedBlocks) {
         this.canBreakPlacedBlocks = canBreakPlacedBlocks;
+    }
+
+    public HashSet<LocationVector> getPlacedBlocks() {
+        return placedBlocks;
+    }
+
+    public void setPlacedBlocks(HashSet<LocationVector> placedBlocks) {
+        this.placedBlocks = placedBlocks;
     }
 
     public boolean isDisableHunger() {
