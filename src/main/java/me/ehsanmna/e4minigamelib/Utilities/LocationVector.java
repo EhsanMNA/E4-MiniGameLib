@@ -1,0 +1,107 @@
+package me.ehsanmna.e4minigamelib.Utilities;
+
+import org.bukkit.Location;
+import org.bukkit.World;
+
+import java.util.Objects;
+
+public class LocationVector {
+
+    public LocationVector(double x,double y,double z){
+        this.x = x; this.y = y; this.z = z;
+    }
+    public LocationVector(World world,double x,double y,double z){
+        this.x = x; this.y = y; this.z = z;this.world = world;
+    }
+    public LocationVector(double x,double y,double z,double yaw,double pitch){
+        this.x = x; this.y = y; this.z = z; this.yaw = yaw; this.pitch = pitch;
+    }
+    public LocationVector(World world,double x,double y,double z,double yaw,double pitch){
+        this.x = x; this.y = y; this.z = z;this.yaw = yaw; this.pitch = pitch; this.world = world;
+    }
+    public LocationVector(Location location){
+        this.world = location.getWorld();
+        this.x = location.getX();
+        this.y = location.getY();
+        this.z = location.getZ();
+        this.yaw = location.getYaw();
+        this.pitch = location.getPitch();
+    }
+
+    private World world;
+    private double x = 0;
+    private double y = 0;
+    private double z = 0;
+    private double yaw = 0;
+    private double pitch = 0;
+
+    public void setX(double x){this.x = x;}
+    public void setY(double y){this.y = y;}
+    public void setZ(double z){this.z = z;}
+    public void setYaw(double yaw){this.yaw = yaw;}
+    public void setPitch(double pitch){this.pitch = pitch;}
+    public void setWorld(World world){this.world = world;}
+
+    public double getX(){return x;}
+    public double getY(){return y;}
+    public double getZ(){return z;}
+    public double getYaw(){return yaw;}
+    public double getPitch(){return pitch;}
+    public World getWorld(){return world;}
+
+    public int getIX(){return (int)x;}
+    public int getIY(){return (int)y;}
+    public int getIZ(){return (int)z;}
+    public int getIYaw(){return (int)yaw;}
+    public int getIPitch(){return (int)pitch;}
+
+    public String toString(){
+        if (world == null){
+            if (yaw == 0 || pitch == 0){
+                return x + " " + y +" "+ z ;
+            }else {
+                return x + " " + y +" "+ z + " "+ yaw + " "+ pitch;
+            }
+        }
+        else {
+            if (yaw == 0 || pitch == 0){
+                return world.getName() + " "+ x + " " + y +" "+ z ;
+            }else {
+                return world.getName() + x + " " + y +" "+ z + " "+ yaw + " "+ pitch;
+            }
+        }
+    }
+
+    public boolean equal(LocationVector location){
+        if (location.getWorld() == null){
+            if (location.yaw == 0 || location.pitch == 0)
+                return (location.getX() == x && location.getY() == y && location.getZ() == z);
+            else
+                return location.getX() == x && location.getY() == y && location.getZ() == z
+                        && location.yaw == yaw && location.pitch == pitch;
+        }else {
+            if (location.yaw == 0 || location.pitch == 0)
+                return (world.getName().equals(world.getName()) && location.getX() == x && location.getY() == y && location.getZ() == z);
+            else
+                return world.getName().equals(world.getName()) && location.getX() == x && location.getY() == y
+                        && location.getZ() == z && location.yaw == yaw && location.pitch == pitch;
+        }
+    }
+
+    public boolean equalIgnoreFloat(LocationVector location){
+        if (location.getWorld() == null)
+            return (location.getIX() == (int)x && location.getIY() == (int)y && location.getIZ() == (int)z);
+        else
+            return (world.getName().equals(world.getName()) && location.getIX() == (int)x && location.getIY() == (int)y && location.getIZ() == (int)z);
+
+    }
+
+    public Location getAsLocation(){
+        if (world != null){
+            if (yaw != 0 && pitch != 0){
+                return new Location(world,x,y,z,(float)yaw,(float)pitch);
+            }else return new Location(world,x,y,z);
+        }else return new Location(null,x,y,z);
+    }
+
+}

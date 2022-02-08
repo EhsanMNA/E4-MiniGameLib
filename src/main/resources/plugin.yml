@@ -1,0 +1,4 @@
+name: E4MiniGameLib
+version: '${project.version}'
+main: me.ehsanmna.e4minigamelib.E4MiniGameLib
+authors: [ EhsanMNA ]
