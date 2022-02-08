@@ -9,6 +9,7 @@ import ir.e4Team.e4minigamelib.Arena.ScoreBoard.ArenaBoard;
 import ir.e4Team.e4minigamelib.Team.Team;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,6 +25,7 @@ public class Arena {
     }
 
     JavaPlugin plugin;
+    ArenaStorage storage;
     String name;
     String displayName;
     int maxPlayersPerTeam;
@@ -72,6 +74,10 @@ public class Arena {
 
     public JavaPlugin getPlugin() {
         return plugin;
+    }
+
+    public ArenaStorage getStorage() {
+        return storage;
     }
 
     public void setPlugin(JavaPlugin plugin) {
@@ -136,6 +142,13 @@ public class Arena {
 
     public void saveArena() throws ArenaSaveException {
         if (name == null || stats == null || id == 0 || teams == null) throw new ArenaSaveException("Could not save the arena name=" + name + " arenaStats=" + stats.toString());
+        FileConfiguration yml = storage.yml;
+        yml.set("name",name);
+        yml.set("displayname",getDisplayName());
+        yml.set("maxPlayerPerTeam",getMaxPlayersPerTeam());
+        yml.set("waitingTime",waitingT);
+        yml.set("GameModes.waiting",waitingGameMode);
+        yml.set("GameModes.game",gameplayGameMode);
         stat = ArenaStatus.Enable;
     }
 
