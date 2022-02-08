@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class PlayerBukkitEvents implements Listener {
                     ArenaManager.getPlayingTeam(damaged,ArenaManager.getArenaOfPlayer(damaged)))){
 
                     if (ArenaManager.getArenaOfPlayer(damager).getStats().isDisableTeamShot()) e.setCancelled(true);
-                    
+
                 }
             }
         }
@@ -89,6 +90,20 @@ public class PlayerBukkitEvents implements Listener {
                 }
             }
             arena.getStats().getPlacedBlocks().remove(new LocationVector(e.getBlock().getLocation()).getAsRond());
+        }
+    }
+
+    @EventHandler
+    public void onDeath(EntityDamageByEntityEvent e){
+        if (e.getEntity() instanceof Player){
+            Player player = (Player) e.getEntity();
+            if (ArenaManager.isPlaying(player)){
+                Arena arena = ArenaManager.getPlayingArena(player);
+                if (e.getDamage() > player.getHealth()){
+                    e.setCancelled(true);
+                    player.teleport(ArenaManager.getPlayingTeam(player,arena).getSpawnPoint().getAsLocation());
+                }
+            }
         }
     }
 
