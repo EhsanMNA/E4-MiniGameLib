@@ -3,13 +3,13 @@
 
 **To do** » 
    - ArenaBoards
-   - ArenaSaving
-   - new Team random join to team system
-   - Custom lists
-   - Better Region class
-   - Gui builder
-   - Item builder
-   - Start task
-   - Start items
-   - lobby items
-   - waiting items
+   - ArenaSaving **50% Done**
+   - new Team random join to team system **80% done**
+   - Custom lists **working**
+   - Better Region class 
+   - Gui builder **DONE**
+   - Item builder **DONE**
+   - Start task **50% DONE**
+   - Start items 
+   - lobby items 
+   - waiting items 
