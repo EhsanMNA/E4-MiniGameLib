@@ -1,4 +1,4 @@
-package me.ehsanmna.e4minigamelib.Utilities.BukkitEvents;
+package me.ehsanmna.e4minigamelib.Utilities.Listeners;
 
 import me.ehsanmna.e4minigamelib.Arena.Arena;
 import me.ehsanmna.e4minigamelib.Arena.ArenaManager;
