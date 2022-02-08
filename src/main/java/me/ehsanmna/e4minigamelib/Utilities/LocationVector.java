@@ -104,4 +104,8 @@ public class LocationVector {
         }else return new Location(null,x,y,z);
     }
 
+    public LocationVector getAsRond(){
+        return new LocationVector(world,getIX(),getIY(),getIZ());
+    }
+
 }

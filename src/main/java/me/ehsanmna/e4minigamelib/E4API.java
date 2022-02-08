@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class E4API {
 
-    IVersion version;
+    static IVersion version;
 
     public static Set<JavaPlugin> tools = new HashSet<>();
 
@@ -48,6 +48,10 @@ public class E4API {
         }
         tools.add(plugin);
         this.plugin = plugin;
+    }
+
+    public static IVersion getServerVersion(){
+        return version;
     }
 
     public ArenaManager getArenaManager(){

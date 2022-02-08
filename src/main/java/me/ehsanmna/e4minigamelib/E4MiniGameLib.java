@@ -1,6 +1,5 @@
 package me.ehsanmna.e4minigamelib;
 
-import me.ehsanmna.e4minigamelib.GUI.InventoryEvent;
 import me.ehsanmna.e4minigamelib.Utilities.Utils;
 import me.ehsanmna.e4minigamelib.tasks.ToolsTask;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,7 +12,7 @@ public final class E4MiniGameLib extends JavaPlugin {
     public void onEnable() {
         getServer().getConsoleSender().sendMessage(Utils.color("&a==========================="));
         new ToolsTask(this).implementsApi();
-        new InventoryEvent(this).register();
+
 
 
         getServer().getConsoleSender().sendMessage(Utils.color("&a==========================="));
