@@ -1,14 +1,10 @@
 package ir.e4Team.e4minigamelib.Arena;
 
 
-import ir.e4Team.e4minigamelib.Arena.Events.ArenaTickEvent;
-import ir.e4Team.e4minigamelib.Arena.Events.PlayerLeaveArenaEvent;
+import ir.e4Team.e4minigamelib.Arena.Events.*;
 import ir.e4Team.e4minigamelib.E4API;
 import ir.e4Team.e4minigamelib.Exceptions.ArenaSaveException;
-import ir.e4Team.e4minigamelib.Utilities.Storage;
 import ir.e4Team.e4minigamelib.Utilities.Utils;
-import ir.e4Team.e4minigamelib.Arena.Events.ArenaMatchStartEvent;
-import ir.e4Team.e4minigamelib.Arena.Events.PlayerJoinArenaEvent;
 import ir.e4Team.e4minigamelib.Arena.ScoreBoard.ArenaBoard;
 import ir.e4Team.e4minigamelib.Team.Team;
 import org.bukkit.Bukkit;
@@ -140,12 +136,6 @@ public class Arena {
 
     public void saveArena() throws ArenaSaveException {
         if (name == null || stats == null || id == 0 || teams == null) throw new ArenaSaveException("Could not save the arena name=" + name + " arenaStats=" + stats.toString());
-        Storage.getData().set("Arenas." + plugin.getName() + "." + id + ".name",name);
-        Storage.getData().set("Arenas." + plugin.getName() + "." + id + ".displayname",displayName);
-        Storage.getData().set("Arenas." + plugin.getName() + "." + id + ".maxPlayerPerTeam",maxPlayersPerTeam);
-        Storage.getData().set("Arenas." + plugin.getName() + "." + id + ".waitingTime",waitingT);
-        Storage.getData().set("Arenas." + plugin.getName() + "." + id + ".GameModes.waiting",waitingGameMode);
-        Storage.getData().set("Arenas." + plugin.getName() + "." + id + ".GameModes.game",gameplayGameMode);
         stat = ArenaStatus.Enable;
     }
 
@@ -221,6 +211,12 @@ public class Arena {
                         remaining.add(p);
                         continue;
                     }
+                    TeamSelectEvent e = new TeamSelectEvent(null,team,Bukkit.getPlayer(p));
+                    Bukkit.getPluginManager().callEvent(e);
+                    if(e.isCancelled()){
+                        remaining.add(p);
+                        continue;
+                    }
                     team.addPlayer(p);
                     rp.remove(p);
                 }
@@ -231,6 +227,12 @@ public class Arena {
                     for (String p : remaining){
                         if (team == null) continue;
                         if (team.getPlayers().size() == maxPlayersPerTeam) continue;
+                        TeamSelectEvent e = new TeamSelectEvent(null,team,Bukkit.getPlayer(p));
+                        Bukkit.getPluginManager().callEvent(e);
+                        if(e.isCancelled()){
+                            remaining.add(p);
+                            continue;
+                        }
                         team.addPlayer(p);
                         remaining.remove(p);
                     }

@@ -7,11 +7,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class E4MiniGameLib extends JavaPlugin {
 
+    static E4MiniGameLib main;
+
     int errors = 0;
 
     @Override
     public void onEnable() {
         getServer().getConsoleSender().sendMessage(Utils.color("&a==========================="));
+        main = this;
         new ToolsTask(this).implementsApi();
         new InventoryEvent(this).register();
 
@@ -26,10 +29,10 @@ public final class E4MiniGameLib extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        main = null;
     }
 
-    public static String getFilePath(){
-        return getFilePath();
+    public static E4MiniGameLib getInstance(){
+        return main;
     }
 }

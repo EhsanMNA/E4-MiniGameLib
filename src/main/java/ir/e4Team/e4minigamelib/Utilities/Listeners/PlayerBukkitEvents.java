@@ -2,8 +2,10 @@ package ir.e4Team.e4minigamelib.Utilities.Listeners;
 
 import ir.e4Team.e4minigamelib.Arena.Arena;
 import ir.e4Team.e4minigamelib.Arena.ArenaManager;
+import ir.e4Team.e4minigamelib.Arena.Events.PlayerReSpawnGameEvent;
 import ir.e4Team.e4minigamelib.Team.Team;
 import ir.e4Team.e4minigamelib.Utilities.LocationVector;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -56,20 +58,6 @@ public class PlayerBukkitEvents implements Listener {
                         if (zM - zL <= 3) e.setCancelled(true);
             }
             if(!e.isCancelled()) arena.getStats().getPlacedBlocks().add(new LocationVector(e.getBlockPlaced().getLocation()).getAsRond());
-                /*
-                if (arena.getStats().getPlacedBlocks().contains(player.getUniqueId())){
-                    if (arena.getStats().getPlacedBlocks().get(player.getUniqueId()).isEmpty()){
-                        Set<LocationVector> set = new HashSet<>();
-                        set.add(new LocationVector(e.getBlockPlaced().getLocation()));
-                        arena.getStats().getPlacedBlocks().put(player.getUniqueId(),set);
-                    }else {
-                        arena.getStats().getPlacedBlocks().get(player.getUniqueId()).add(new LocationVector(e.getBlockPlaced().getLocation()));
-                    }
-                }else {
-                    Set<LocationVector> set = new HashSet<>();
-                    set.add(new LocationVector(e.getBlockPlaced().getLocation()));
-                    arena.getStats().getPlacedBlocks().put(player.getUniqueId(),set);
-                }*/
         }
     }
 
@@ -98,6 +86,8 @@ public class PlayerBukkitEvents implements Listener {
                 if (e.getDamage() > player.getHealth()){
                     e.setCancelled(true);
                     player.teleport(ArenaManager.getPlayingTeam(player,arena).getSpawnPoint().getAsLocation());
+                    PlayerReSpawnGameEvent event = new PlayerReSpawnGameEvent(arena,player);
+                    Bukkit.getPluginManager().callEvent(event);
                 }
             }
         }
