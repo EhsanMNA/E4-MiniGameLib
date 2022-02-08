@@ -1,6 +1,5 @@
 package me.ehsanmna.e4minigamelib.Arena;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
@@ -85,7 +84,7 @@ public class ArenaList {
 
     private void ensureCapacity() {
         int newSize = arenas.length + 1;
-        Object[] newArenas = new Object[newSize];
+        Arena[] newArenas = new Arena[newSize];
         System.arraycopy(arenas, 0, newArenas, 0, arenas.length);
         arenas = newArenas;
     }

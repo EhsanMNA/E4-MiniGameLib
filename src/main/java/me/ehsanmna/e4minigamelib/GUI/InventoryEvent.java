@@ -23,9 +23,9 @@ public class InventoryEvent implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onClick(InventoryClickEvent e) {
+        if (e.getCurrentItem() == null) return;
         for (GUI gui : GUIManager.playerGUIs.values()) {
             if (!e.getInventory().equals(gui.getInventory())) return;
-            if (e.getCurrentItem() == null) return;
             e.setCancelled(true);
             if (!(e.getRawSlot() <= e.getClickedInventory().getSize())) return;
             ClickEvent event = gui.getClickEvents().get(e.getSlot());
