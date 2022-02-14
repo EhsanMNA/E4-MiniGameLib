@@ -25,12 +25,9 @@ public class PlayerBukkitEvents implements Listener {
                 if (arena == null) return;
                 if (arena.getStats().isDisablePvp()) {e.setCancelled(true); return; }
                 Team team = ArenaManager.getPlayingTeam(damager,arena);
-                if (ArenaManager.getPlayingTeam(damager,arena).equals(
-                    ArenaManager.getPlayingTeam(damaged,ArenaManager.getArenaOfPlayer(damaged)))){
-
-                    if (ArenaManager.getArenaOfPlayer(damager).getStats().isDisableTeamShot()) e.setCancelled(true);
-
-                }
+                Team team2 = ArenaManager.getPlayingTeam(damaged,arena);
+                if (team == null || team2 == null) {e.setCancelled(true);return;}
+                if (team.equalsTo(team2) && arena.getStats().isDisableTeamShot()) e.setCancelled(true);
             }
         }
     }

@@ -82,7 +82,7 @@ public class Team {
 
     public void removePlayer(String player){players.remove(player);}
 
-    public boolean equals(Team team){
+    public boolean equalsTo(Team team){
         return team.getName().equalsIgnoreCase(team.getName());
     }
 }
