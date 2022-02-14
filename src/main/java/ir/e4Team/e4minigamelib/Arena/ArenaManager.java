@@ -1,14 +1,21 @@
 package ir.e4Team.e4minigamelib.Arena;
 
+import ir.e4Team.e4minigamelib.E4MiniGameLib;
 import ir.e4Team.e4minigamelib.Exceptions.ArenaNotFoundException;
 import ir.e4Team.e4minigamelib.Team.Team;
 import ir.e4Team.e4minigamelib.Utilities.Colors;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ArenaManager {
 
@@ -108,6 +115,25 @@ public class ArenaManager {
             }
         }
         return null;
+    }
+    public static void loadArenas() {
+        File plugins = new File(E4MiniGameLib.getInstance().getDataFolder().getPath() + "\\PluginsData");
+
+        for(File plugin : Objects.requireNonNull(plugins.listFiles())) {
+
+            File arenasYml = new File(plugin.getPath() + "\\arenas");
+            ArrayList<Arena> arenas = new ArrayList<>();
+
+            for(File arenaYml : Objects.requireNonNull(arenasYml.listFiles())) {
+
+                FileConfiguration yml = YamlConfiguration.loadConfiguration(arenaYml);
+                Plugin pluginByName = Bukkit.getPluginManager().getPlugin(plugin.getName());
+                ArenaStats arenaStats = new ArenaStats();
+                // aya mayel be goshadi hastid? inja ro por konid
+                Arena arena = new Arena(pluginByName.getName(), );
+                arenas.add()
+            }
+        }
     }
 
 

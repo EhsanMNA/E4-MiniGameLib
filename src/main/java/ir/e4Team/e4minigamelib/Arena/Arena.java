@@ -149,6 +149,7 @@ public class Arena {
         yml.set("waitingTime",waitingT);
         yml.set("GameModes.waiting",waitingGameMode);
         yml.set("GameModes.game",gameplayGameMode);
+        yml.set("stats",stats.toString());
         stat = ArenaStatus.Enable;
     }
 

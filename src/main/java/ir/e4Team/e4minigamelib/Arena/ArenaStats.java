@@ -140,11 +140,11 @@ public class ArenaStats {
     }
 
     public String toString(){
-        return "waitingPoint=" + waitingPoint.toString() + " - spectatorPoint=" + spectatorPoint.toString()
-                + " - spawnPoints=" + spawnPoints.toString() + " - firstSpawnPoints=" + firstSpawnPoints.toString()
-                + " - teamBases=" + teamBases.toString() + " - region=" + region.toString()
-                + " - disabled flags => " + "blockPlace=" + canPlaceBlock + " blockBreak=" + canBreakDefaultBlocks
-                + " blockBreakPlayers=" + canBreakPlacedBlocks + " hunger=" + disableHunger
-                + " damage=" + disableDamage + " pvp=" + disablePvp + " teamShot=" + disableTeamShot;
+        return "waitingPoint=" + waitingPoint.toString() + "-spectatorPoint=" + spectatorPoint.toString()
+                + "-spawnPoints=" + spawnPoints.toString() + "- firstSpawnPoints=" + firstSpawnPoints.toString()
+                + "-teamBases=" + teamBases.toString() + "-region=" + region.toString()
+                + "-disabled flags => " + "blockPlace=" + canPlaceBlock + " blockBreak=" + canBreakDefaultBlocks
+                + "blockBreakPlayers=" + canBreakPlacedBlocks + " hunger=" + disableHunger
+                + "damage=" + disableDamage + " pvp=" + disablePvp + " teamShot=" + disableTeamShot;
     }
 }
