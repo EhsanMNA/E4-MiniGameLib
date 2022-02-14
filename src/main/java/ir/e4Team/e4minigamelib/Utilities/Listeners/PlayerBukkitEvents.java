@@ -21,28 +21,30 @@ public class PlayerBukkitEvents implements Listener {
             Player damager = (Player) e.getDamager();
             Player damaged = (Player) e.getEntity();
             if (ArenaManager.isPlaying(damager) && ArenaManager.isPlaying(damaged)){
-                if (ArenaManager.getArenaOfPlayer(damager).getStats().isDisablePvp()) {e.setCancelled(true); return; }
-                if (ArenaManager.getPlayingTeam(damager,ArenaManager.getPlayingArena(damager)).equals(
-                    ArenaManager.getPlayingTeam(damaged,ArenaManager.getArenaOfPlayer(damaged)))){
-
-                    if (ArenaManager.getArenaOfPlayer(damager).getStats().isDisableTeamShot()) e.setCancelled(true);
-
-                }
+                Arena arena = ArenaManager.getArenaOfPlayer(damager);
+                if (arena == null) return;
+                if (arena.getStats().isDisablePvp()) {e.setCancelled(true); return; }
+                Team team = ArenaManager.getPlayingTeam(damager,arena);
+                Team team2 = ArenaManager.getPlayingTeam(damaged,arena);
+                if (team == null || team2 == null) {e.setCancelled(true);return;}
+                if (team.equalsTo(team2) && arena.getStats().isDisableTeamShot()) e.setCancelled(true);
             }
         }
     }
 
     @EventHandler
     public void onPlaceBlockEvent(BlockPlaceEvent e){
+        if(e.isCancelled()) return;
         Player player = e.getPlayer();
         if (ArenaManager.isPlaying(player)){
             Arena arena = ArenaManager.getArenaOfPlayer(player);
+            if(arena == null) return;
             if (!arena.getStats().canPlaceBlock()){
                 e.setCancelled(true);
                 return;
             }
             Team team = ArenaManager.getPlayingTeam(player,arena);
-            for (Team tm : arena.getStats().getTeamBases().keySet()){
+            for (Team tm : arena.getTeams()){
                 if (tm == team) continue;
                 if(tm.getSpawnPoint().equalIgnoreFloat(new LocationVector(e.getBlockPlaced().getLocation()))) e.setCancelled(true);
                 LocationVector teamLoc = tm.getSpawnPoint();
@@ -53,9 +55,7 @@ public class PlayerBukkitEvents implements Listener {
                 int xL = Math.min(teamLoc.getIX(), blockLoc.getIX());
                 int yL = Math.min(teamLoc.getIY(), blockLoc.getIY());
                 int zL = Math.min(teamLoc.getIZ(), blockLoc.getIZ());
-                if (yM - yL <= 3)
-                    if (xM - xL <= 3)
-                        if (zM - zL <= 3) e.setCancelled(true);
+                if (yM - yL <= 2 && xM - xL <= 2 && zM - zL <= 2) e.setCancelled(true);
             }
             if(!e.isCancelled()) arena.getStats().getPlacedBlocks().add(new LocationVector(e.getBlockPlaced().getLocation()).getAsRond());
         }
@@ -66,6 +66,7 @@ public class PlayerBukkitEvents implements Listener {
         Player player = e.getPlayer();
         if (ArenaManager.isPlaying(player)){
             Arena arena = ArenaManager.getArenaOfPlayer(player);
+            if (arena == null) return;
             if (!arena.getStats().canBreakDefaultBlocks()){
                 if (!arena.getStats().canBreakPlacedBlocks()) {e.setCancelled(true); return;}
                 else {
@@ -83,9 +84,11 @@ public class PlayerBukkitEvents implements Listener {
             Player player = (Player) e.getEntity();
             if (ArenaManager.isPlaying(player)){
                 Arena arena = ArenaManager.getPlayingArena(player);
+                Team team = ArenaManager.getPlayingTeam(player,arena);
+                if (arena == null || team == null) return;
                 if (e.getDamage() > player.getHealth()){
                     e.setCancelled(true);
-                    player.teleport(ArenaManager.getPlayingTeam(player,arena).getSpawnPoint().getAsLocation());
+                    player.teleport(team.getSpawnPoint().getAsLocation());
                     PlayerReSpawnGameEvent event = new PlayerReSpawnGameEvent(arena,player);
                     Bukkit.getPluginManager().callEvent(event);
                 }
