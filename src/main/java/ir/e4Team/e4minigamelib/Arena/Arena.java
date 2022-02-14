@@ -173,6 +173,11 @@ public class Arena {
                 player.teleport(stats.getWaitingPoint().getAsLocation());
                 player.setScoreboard(boards.getWaitingBoard());
                 player.setGameMode(waitingGameMode);
+                Team team = ArenaManager.getPlayingTeam(player,this);
+                if (team != null){
+                    team.getPlayers().remove(player.getName());
+                    if (team.getPlayers().isEmpty()) team.setEliminated(true);
+                }
             }
         }
     }
@@ -262,6 +267,18 @@ public class Arena {
             }
         }
 
+    }
+
+    public void finish(){
+        Set<Team> remainingTeams = new HashSet<>();
+        for (Team team : teams){
+            if (team.isEliminated()) continue;
+            remainingTeams.add(team);
+        }
+        if (remainingTeams.isEmpty()){
+            System.out.println("could not finish the " + name + " arena from " + plugin.getName() + " because no teams are remaining!");
+            return;
+        }
     }
 
 }

@@ -14,6 +14,7 @@ public class Team {
 
     Colors color;
     String name;
+    boolean eliminated = true;
     int maxPlayer = 1;
     Set<String> players;
     TeamStatus stat = TeamStatus.EMPTY;
@@ -84,5 +85,13 @@ public class Team {
 
     public boolean equalsTo(Team team){
         return team.getName().equalsIgnoreCase(team.getName());
+    }
+
+    public boolean isEliminated() {
+        return eliminated;
+    }
+
+    public void setEliminated(boolean eliminated) {
+        this.eliminated = eliminated;
     }
 }
