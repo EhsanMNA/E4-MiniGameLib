@@ -4,11 +4,13 @@ package ir.e4Team.e4minigamelib.Arena;
 import ir.e4Team.e4minigamelib.Arena.Events.*;
 import ir.e4Team.e4minigamelib.E4API;
 import ir.e4Team.e4minigamelib.Exceptions.ArenaSaveException;
+import ir.e4Team.e4minigamelib.Utilities.LocationVector;
 import ir.e4Team.e4minigamelib.Utilities.Utils;
 import ir.e4Team.e4minigamelib.Arena.ScoreBoard.ArenaBoard;
 import ir.e4Team.e4minigamelib.Team.Team;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,6 +40,15 @@ public class Arena {
     GameMode waitingGameMode = GameMode.ADVENTURE;
     GameMode gameplayGameMode = GameMode.SURVIVAL;
     BukkitTask task;
+
+    public int getWaitingT() {
+        return waitingT;
+    }
+
+    public void setWaitingT(int waitingT) {
+        this.waitingT = waitingT;
+    }
+
     int waitingT = 30;
 
     public int getMaxPlayersPerTeam() {
@@ -149,7 +160,19 @@ public class Arena {
         yml.set("waitingTime",waitingT);
         yml.set("GameModes.waiting",waitingGameMode);
         yml.set("GameModes.game",gameplayGameMode);
-        yml.set("stats",stats.toString());
+        yml.set("stats.waiting",stats.getWaitingPoint());
+        yml.set("stats.spectating",stats.getSpectatorPoint());
+        yml.set("stats.teamBases",stats.getTeamBases());
+        yml.set("stats.firstSpawnPoints",stats.getFirstSpawnPoints());
+        yml.set("stats.spawnPoints",stats.getSpawnPoints());
+        yml.set("stats.region",stats.getRegion());
+        yml.set("stats.disableDamage",stats.isDisableDamage());
+        yml.set("stats.pvp",stats.isDisablePvp());
+        yml.set("stats.block.breakDefault",stats.canBreakDefaultBlocks());
+        yml.set("stats.block.breakPlayers",stats.canBreakPlacedBlocks());
+        yml.set("stats.block.place",stats.canPlaceBlock());
+        yml.set("stats.disableHunger",stats.disableHunger);
+        yml.set("stats.disableFriendFire",stats.disableTeamShot);
         stat = ArenaStatus.Enable;
     }
 
@@ -270,16 +293,49 @@ public class Arena {
 
     }
 
+    public void end(){
+        for (LocationVector location : stats.getPlacedBlocks()){
+            location.getAsLocation().getBlock().setType(Material.AIR);
+            setStat(ArenaStatus.Enable);
+        }
+    }
+
     public void finish(){
-        Set<Team> remainingTeams = new HashSet<>();
+        Team remainingTeams = null;
         for (Team team : teams){
             if (team.isEliminated()) continue;
-            remainingTeams.add(team);
+            remainingTeams = team;
+            break;
         }
-        if (remainingTeams.isEmpty()){
+        if (remainingTeams == null){
             System.out.println("could not finish the " + name + " arena from " + plugin.getName() + " because no teams are remaining!");
             return;
         }
+        for (String player : remainingTeams.getPlayers()){
+            Player p = Bukkit.getPlayerExact(player);
+            if (p == null) continue;
+            p.sendMessage(Utils.color("&e&m======================"));
+            p.sendMessage(Utils.color("&e "));
+            p.sendMessage(Utils.color("&e            &lVictory !  "));
+            p.sendMessage(Utils.color("&e "));
+            p.sendMessage(Utils.color("&e&m======================"));
+        }
+        Team finalRemainingTeams = remainingTeams;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for(String p : finalRemainingTeams.getPlayers()){
+                    Player player = Bukkit.getPlayerExact(p);
+                    if (player == null) continue;
+                    E4API api = new E4API(plugin);
+                    player.teleport(api.getLobbySpawnPoint().getAsLocation());
+                    player.getInventory().clear();
+                    players.remove(player.getName());
+                }
+                end();
+                cancel();
+            }
+        }.runTaskLaterAsynchronously(plugin, 20 * 5);
     }
 
 }

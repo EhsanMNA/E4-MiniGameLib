@@ -1,9 +1,12 @@
 package ir.e4Team.e4minigamelib.Utilities;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+
+import java.rmi.registry.Registry;
 
 public class Region {
 
@@ -105,8 +108,30 @@ public class Region {
         return false;
     }
 
+    public World getWorld(){
+        return world;
+    }
+
+    public void setWorld(World world){
+        this.world = world;
+    }
+
     public String toString(){
-        return "World => " + world.getName() + " First position => " + firstPos.toString() + " Second position => " + secondPos.toString();
+        return "World => " + world.getName() + "-First position => " + firstPos.toString() + "-Second position => " + secondPos.toString();
+    }
+
+    public static Region toValue(String str){
+        Region rg = new Region();
+        String[] args = str.split("-");
+        World world = Bukkit.getWorld(args[0].replace("World => ",""));
+        LocationVector firstLocation = new LocationVector(args[1].replace("First position => ",""));
+        LocationVector secondLocation = new LocationVector(args[2].replace("Second position => ",""));
+
+        rg.setWorld(world);
+        rg.setFirstPos(firstLocation);
+        rg.setSecondPos(secondLocation);
+
+        return rg;
     }
 
 

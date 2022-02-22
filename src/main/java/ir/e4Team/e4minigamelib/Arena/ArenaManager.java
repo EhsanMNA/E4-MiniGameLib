@@ -4,6 +4,7 @@ import ir.e4Team.e4minigamelib.E4MiniGameLib;
 import ir.e4Team.e4minigamelib.Exceptions.ArenaNotFoundException;
 import ir.e4Team.e4minigamelib.Team.Team;
 import ir.e4Team.e4minigamelib.Utilities.Colors;
+import ir.e4Team.e4minigamelib.Utilities.LocationVector;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -130,9 +131,17 @@ public class ArenaManager {
                 Plugin pluginByName = Bukkit.getPluginManager().getPlugin(plugin.getName());
                 ArenaStats arenaStats = new ArenaStats();
                 // aya mayel be goshadi hastid? inja ro por konid
-                Arena arena = new Arena(pluginByName.getName(), );
-                arenas.add()
+                // chashm ;D
             }
+        }
+    }
+
+    public static void addArena(JavaPlugin plugin,Arena arena){
+        if (arenas.containsKey(plugin.getName())) arenas.get(plugin.getName()).add(arena);
+        else {
+            ArrayList<Arena> ares = new ArrayList<>();
+            ares.add(arena);
+            arenas.put(plugin.getName(),ares);
         }
     }
 
