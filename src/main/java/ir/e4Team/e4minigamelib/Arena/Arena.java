@@ -278,7 +278,6 @@ public class Arena {
         }
         if (remainingTeams.isEmpty()){
             System.out.println("could not finish the " + name + " arena from " + plugin.getName() + " because no teams are remaining!");
-            return;
         }
     }
 

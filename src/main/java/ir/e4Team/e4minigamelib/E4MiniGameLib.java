@@ -1,7 +1,8 @@
 package ir.e4Team.e4minigamelib;
 
-import ir.e4Team.e4minigamelib.GUI.InventoryEvent;
 import ir.e4Team.e4minigamelib.Utilities.Utils;
+import ir.e4Team.e4minigamelib.base.schelder.Scheduler;
+import ir.e4Team.e4minigamelib.base.schelder.SpigotScheduler;
 import ir.e4Team.e4minigamelib.tasks.ToolsTask;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -9,15 +10,17 @@ public final class E4MiniGameLib extends JavaPlugin {
 
     static E4MiniGameLib main;
 
+    private static Scheduler scheduler;
+
     int errors = 0;
+
 
     @Override
     public void onEnable() {
         getServer().getConsoleSender().sendMessage(Utils.color("&a==========================="));
         main = this;
         new ToolsTask(this).implementsApi();
-        new InventoryEvent(this).register();
-
+        scheduler = new SpigotScheduler(this);
 
         getServer().getConsoleSender().sendMessage(Utils.color("&a==========================="));
         getServer().getConsoleSender().sendMessage(Utils.color("&2E4 MiniGame library has been enabled."));
@@ -34,5 +37,9 @@ public final class E4MiniGameLib extends JavaPlugin {
 
     public static E4MiniGameLib getInstance(){
         return main;
+    }
+
+    public static Scheduler getScheduler() {
+        return scheduler;
     }
 }

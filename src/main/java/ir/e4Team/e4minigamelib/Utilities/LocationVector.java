@@ -103,6 +103,8 @@ public class LocationVector {
     }
 
     public LocationVector getAsRond(){
+        Thread t= null;
+        t.start();
         return new LocationVector(world,getIX(),getIY(),getIZ());
     }
 
