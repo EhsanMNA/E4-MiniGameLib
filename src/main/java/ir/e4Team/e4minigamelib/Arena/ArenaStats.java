@@ -3,7 +3,10 @@ package ir.e4Team.e4minigamelib.Arena;
 import ir.e4Team.e4minigamelib.Team.Team;
 import ir.e4Team.e4minigamelib.Utilities.LocationVector;
 import ir.e4Team.e4minigamelib.Utilities.Region;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -141,10 +144,47 @@ public class ArenaStats {
 
     public String toString(){
         return "waitingPoint=" + waitingPoint.toString() + "-spectatorPoint=" + spectatorPoint.toString()
-                + "-spawnPoints=" + spawnPoints.toString() + "- firstSpawnPoints=" + firstSpawnPoints.toString()
+                + "-spawnPoints=" + spawnPoints.toString() + "-firstSpawnPoints=" + firstSpawnPoints.toString()
                 + "-teamBases=" + teamBases.toString() + "-region=" + region.toString()
-                + "-disabled flags => " + "blockPlace=" + canPlaceBlock + " blockBreak=" + canBreakDefaultBlocks
-                + "blockBreakPlayers=" + canBreakPlacedBlocks + " hunger=" + disableHunger
-                + "damage=" + disableDamage + " pvp=" + disablePvp + " teamShot=" + disableTeamShot;
+                + "-blockPlace=" + canPlaceBlock + "-blockBreak=" + canBreakDefaultBlocks
+                + "-blockBreakPlayers=" + canBreakPlacedBlocks + "-hunger=" + disableHunger
+                + "-damage=" + disableDamage + "-pvp=" + disablePvp + "-teamShot=" + disableTeamShot;
+    }
+
+    public static ArenaStats toArenaStats(String str){
+        ArenaStats stats = new ArenaStats();
+        String[] options = str.split("-");
+        String waiting = options[0].replace("waitingPoint=","");
+        World world = null;
+        ArrayList<Integer> poss = new ArrayList<>();
+        boolean isWorldLoaderNow = true;
+        for (String xyz : waiting.split(" ")){
+            try{
+                if (isWorldLoaderNow) {
+                    world = Bukkit.getWorld(xyz);
+                    isWorldLoaderNow = false;
+                    continue;
+                }
+                poss.add(Integer.parseInt(xyz));
+            }catch (NumberFormatException error){
+                error.printStackTrace();
+                break;
+            }
+        }
+        if (!poss.isEmpty()) stats.setWaitingPoint(new LocationVector(world,poss.get(0),poss.get(1),poss.get(2)));
+
+        String spectatorPos = options[1].replace("spectatorPoint=","");
+        ArrayList<Integer> positions = new ArrayList<>();
+        for (String xyz : spectatorPos.split(" ")){
+            try{
+                poss.add(Integer.parseInt(xyz));
+            }catch (NumberFormatException error){
+                error.printStackTrace();
+                break;
+            }
+        }
+        if (!poss.isEmpty()) stats.setSpectatorPoint(new LocationVector(world,poss.get(0),poss.get(1),poss.get(2)));
+
+        return stats;
     }
 }

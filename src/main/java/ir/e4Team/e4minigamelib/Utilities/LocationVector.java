@@ -1,5 +1,6 @@
 package ir.e4Team.e4minigamelib.Utilities;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -24,6 +25,67 @@ public class LocationVector {
         this.z = location.getZ();
         this.yaw = location.getYaw();
         this.pitch = location.getPitch();
+    }
+
+    public LocationVector(String str){
+        String[] args = str.split(" ");
+        if (args.length == 3){
+            try {
+                float x = Float.parseFloat(args[0]);
+                float y = Float.parseFloat(args[1]);
+                float z = Float.parseFloat(args[2]);
+                this.x = x;
+                this.y = y;
+                this.z = z;
+            }catch (NumberFormatException error){
+                error.printStackTrace();
+            }
+        }else if (args.length == 4){
+            try {
+                World world = Bukkit.getWorld(args[0]);
+                float x = Float.parseFloat(args[1]);
+                float y = Float.parseFloat(args[2]);
+                float z = Float.parseFloat(args[3]);
+                this.world = world;
+                this.x = x;
+                this.y = y;
+                this.z = z;
+            }catch (NumberFormatException error){
+                error.printStackTrace();
+            }
+        }else if (args.length == 5){
+            try {
+                float x = Float.parseFloat(args[0]);
+                float y = Float.parseFloat(args[1]);
+                float z = Float.parseFloat(args[2]);
+                float yaw = Float.parseFloat(args[3]);
+                float pitch = Float.parseFloat(args[4]);
+                this.x = x;
+                this.y = y;
+                this.z = z;
+                this.yaw = yaw;
+                this.pitch = pitch;
+            }catch (NumberFormatException error){
+                error.printStackTrace();
+            }
+        }else if (args.length == 6){
+            try {
+                World world = Bukkit.getWorld(args[0]);
+                float x = Float.parseFloat(args[1]);
+                float y = Float.parseFloat(args[2]);
+                float z = Float.parseFloat(args[3]);
+                float yaw = Float.parseFloat(args[4]);
+                float pitch = Float.parseFloat(args[5]);
+                this.world = world;
+                this.x = x;
+                this.y = y;
+                this.z = z;
+                this.yaw = yaw;
+                this.pitch = pitch;
+            }catch (NumberFormatException error){
+                error.printStackTrace();
+            }
+        }
     }
 
     private World world;
@@ -63,9 +125,9 @@ public class LocationVector {
         }
         else {
             if (yaw == 0 || pitch == 0){
-                return world.getName() + " "+ x + " " + y +" "+ z ;
+                return world.getName() + " " + x + " " + y +" "+ z ;
             }else {
-                return world.getName() + x + " " + y +" "+ z + " "+ yaw + " "+ pitch;
+                return world.getName() + " " + x + " " + y +" "+ z + " "+ yaw + " "+ pitch;
             }
         }
     }
